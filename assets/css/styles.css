@@ -389,6 +389,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .page-hero__inner { position: relative; width: 100%; }
 .page-hero__title { max-width: 17ch; margin-bottom: var(--s-4); }
+/* Article titles are long ("Series: Chapter", up to ~90 characters). The 17ch
+   measure set for short page headlines stacked them four lines deep with the
+   right of the hero empty; they run wide instead, balanced over two lines. */
+.page-hero__title.display--md { max-width: 40ch; text-wrap: balance; }
 .page-hero__lede { max-width: 52ch; color: var(--slate-300); font-size: var(--step-1); margin: 0; }
 
 .crumbs { font-size: 0.75rem; color: var(--slate-400); margin: 0 0 var(--s-4); display: flex; gap: var(--s-2); }
