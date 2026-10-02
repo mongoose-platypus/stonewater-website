@@ -71,13 +71,21 @@
        falling so they overlap through the middle. Intensity, detail and
        deformation build from the quiet left, where the copy sits, toward the
        lit upper right. Slopes are shallow so that every surface is still in
-       frame at the left edge. */
+       frame at the left edge.
+
+       It runs livelier than the base settings - deformation in ~20 s rather
+       than ~35 s, and a little more bend - with two narrower accent surfaces
+       (marked) threading the open middle and upper bands. */
     hero: {
+      speed: 1.7,
+      amplitude: 1.2,
       ribbons: [
         { y: 0.95, slope: 0.22, amp: 0.070, w: 0.55, k: 1.1, phase: 0.4, speed: 0.50, depth: 0.10, alpha: 0.62, twist: 0.25, mesh: 0.0, tone: '#173459' },
         { y: 1.05, slope: 0.50, amp: 0.085, w: 0.34, k: 1.4, phase: 1.9, speed: 0.75, depth: 0.35, alpha: 0.52, twist: 0.45, mesh: 0.45, tone: '#30528A' },
+        /* accent */ { y: 0.86, slope: 0.12, amp: 0.060, w: 0.14, k: 1.9, phase: 6.6, speed: 0.85, depth: 0.45, alpha: 0.34, twist: 0.80, mesh: 0.6, tone: '#3A5C8E' },
         { y: 0.40, slope: -0.25, amp: 0.080, w: 0.30, k: 1.7, phase: 3.2, speed: 0.90, depth: 0.55, alpha: 0.48, twist: 0.60, mesh: 1.0, tone: '#47688E' },
         { y: 0.70, slope: 0.36, amp: 0.065, w: 0.24, k: 2.1, phase: 4.7, speed: 1.05, depth: 0.75, alpha: 0.46, twist: 0.90, mesh: 1.0, tone: '#6888A0' },
+        /* accent */ { y: 0.58, slope: -0.05, amp: 0.070, w: 0.16, k: 2.4, phase: 2.3, speed: 1.25, depth: 0.85, alpha: 0.36, twist: 1.20, mesh: 0.8, tone: '#5A7C9A' },
         { y: 0.12, slope: -0.16, amp: 0.090, w: 0.40, k: 1.3, phase: 5.8, speed: 0.65, depth: 1.00, alpha: 0.48, twist: 0.35, mesh: 0.3, tone: '#284B82' }
       ]
     },
@@ -92,9 +100,12 @@
       dprCap: 1.25,
       fps: 30,
       density: 0.85,
+      speed: 1.6,
+      amplitude: 1.15,
       ribbons: [
         { y: 0.96, slope: 0.45, amp: 0.050, w: 0.26, k: 2.2, phase: 1.9, speed: 0.80, depth: 0.35, alpha: 0.55, twist: 0.7, mesh: 0.5, tone: '#2A4674' },
         { y: 1.10, slope: 1.10, amp: 0.045, w: 0.18, k: 2.8, phase: 3.2, speed: 0.95, depth: 0.55, alpha: 0.50, twist: 1.2, mesh: 1.0, tone: '#47668A' },
+        /* accent */ { y: 0.80, slope: 0.20, amp: 0.045, w: 0.13, k: 2.6, phase: 2.3, speed: 1.20, depth: 0.80, alpha: 0.40, twist: 1.4, mesh: 0.8, tone: '#5A7C9A' },
         { y: 0.45, slope: -0.35, amp: 0.050, w: 0.30, k: 1.8, phase: 5.8, speed: 0.70, depth: 1.00, alpha: 0.40, twist: 0.8, mesh: 0.3, tone: '#1C3A6A' }
       ]
     },
@@ -154,7 +165,7 @@
      the empty space is. */
   var COMPACT_QUERY = '(max-width: 860px)';
 
-  var MAX_RIBBONS = 6;
+  var MAX_RIBBONS = 8;
 
   /* ======================================================================== */
 
@@ -186,11 +197,11 @@
     'uniform float u_density;',
     'uniform float u_amp;',
     'uniform float u_width;',
-    'uniform vec4  u_rA[6];',   // y, slope, amp, w
-    'uniform vec4  u_rB[6];',   // k, phase, speed, depth
-    'uniform vec4  u_rC[6];',   // alpha, twist, twist phase, mesh
-    'uniform vec3  u_rT[6];',   // tone
-    'uniform vec4  u_rD[6];',   // per-frame constants, computed once on the CPU
+    'uniform vec4  u_rA[8];',   // y, slope, amp, w
+    'uniform vec4  u_rB[8];',   // k, phase, speed, depth
+    'uniform vec4  u_rC[8];',   // alpha, twist, twist phase, mesh
+    'uniform vec3  u_rT[8];',   // tone
+    'uniform vec4  u_rD[8];',   // per-frame constants, computed once on the CPU
     'uniform vec3  u_ground0;',
     'uniform vec3  u_ground1;',
     'uniform vec3  u_hi;',
