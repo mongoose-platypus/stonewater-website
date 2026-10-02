@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Placeholder">
+  <rect width="1600" height="900" fill="#03111F"/>
+  <g stroke="#123256" stroke-width="1.2" fill="none" opacity="0.85">
+    <path d="M0 470 Q200 440 400 470 T800 470 T1200 470 T1600 470"/>
+    <path d="M0 510 Q200 476 400 510 T800 510 T1200 510 T1600 510"/>
+    <path d="M0 552 Q200 514 400 552 T800 552 T1200 552 T1600 552"/>
+    <path d="M0 598 Q200 556 400 598 T800 598 T1200 598 T1600 598"/>
+    <path d="M0 648 Q200 602 400 648 T800 648 T1200 648 T1600 648"/>
+    <path d="M0 704 Q200 652 400 704 T800 704 T1200 704 T1600 704"/>
+    <path d="M0 766 Q200 708 400 766 T800 766 T1200 766 T1600 766"/>
+    <path d="M0 834 Q200 770 400 834 T800 834 T1200 834 T1600 834"/>
+  </g>
+  <g stroke="#1B3E68" stroke-width="1" fill="none" opacity="0.6">
+    <path d="M0 300 Q300 280 600 300 T1200 300 T1600 300"/>
+    <path d="M0 350 Q300 326 600 350 T1200 350 T1600 350"/>
+    <path d="M0 408 Q300 380 600 408 T1200 408 T1600 408"/>
+  </g>
+  <rect x="1090" y="196" width="6" height="278" fill="#1E4670"/>
+  <path d="M1063 196 h60 l-12 -46 h-36 z" fill="#25527E"/>
+  <circle cx="1093" cy="176" r="15" fill="#3C6E9F" opacity="0.55"/>
+  <path d="M1093 176 L1600 96 L1600 262 Z" fill="#3C6E9F" opacity="0.13"/>
+  <path d="M1093 176 L0 60 L0 236 Z" fill="#3C6E9F" opacity="0.09"/>
+</svg>
