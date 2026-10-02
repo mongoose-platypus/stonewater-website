@@ -360,7 +360,7 @@
     var done = false;
     function finish() { if (!done) { done = true; el.classList.add('is-settled'); } }
     el.addEventListener('transitionend', function (e) {
-      if (e.target === el && (e.propertyName === 'opacity' || e.propertyName === 'clip-path')) finish();
+      if (e.target === el && e.propertyName === 'opacity') finish();
     });
     window.setTimeout(finish, 1800);   // in case no transition runs at all
   }

@@ -64,7 +64,7 @@
      the site is built from these, so the whole site moves at one tempo.
        fast       colour, opacity and small state changes
        standard   hover movement, borders, arrows, rules
-       editorial  image zooms, masks, the mobile drawer
+       editorial  image zooms, the mobile drawer
        reveal     scroll reveals */
   --dur-fast: 180ms;
   --dur-standard: 350ms;
@@ -76,6 +76,17 @@
   --ease: var(--ease-standard);
   --reveal-shift: 24px;   /* how far content travels as it reveals */
   --stagger: 70ms;        /* delay between siblings in a revealed group */
+  /* Surface hover: large areas that change colour under the pointer
+     (capability rows, case-study cards). A short intent delay means passing
+     over a row on the way elsewhere does not fire it; the fill eases in and
+     lingers slightly longer on the way out, so nothing snaps. */
+  --hover-in: 480ms;
+  --hover-out: 750ms;
+  --hover-delay: 90ms;
+  /* Starts gently and builds, rather than front-loading the change - the
+     editorial curve reaches ~90% in its first third, which still reads as a
+     snap on a large fill. */
+  --ease-surface: cubic-bezier(0.45, 0, 0.25, 1);
 }
 
 /* ---------- 2. BASE ---------- */
@@ -410,24 +421,15 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   padding: var(--s-6) var(--s-5);
   margin-inline: calc(var(--s-5) * -1);
   border-bottom: 1px solid var(--line);
-  transition: background-color var(--dur-standard) var(--ease);
 }
-.detail__icon { color: var(--navy-600); transition: color var(--dur-standard) var(--ease); }
-.detail__title {
-  font-family: var(--serif); font-size: var(--step-2); line-height: 1.2;
-  transition: color var(--dur-standard) var(--ease);
-}
-.detail__desc {
-  font-size: 0.9375rem; color: var(--slate-500); margin: 0;
-  transition: color var(--dur-standard) var(--ease);
-}
+/* Timing for this hover lives in the shared surface-hover block (section 17). */
+.detail__icon { color: var(--navy-600); }
+.detail__title { font-family: var(--serif); font-size: var(--step-2); line-height: 1.2; }
+.detail__desc { font-size: 0.9375rem; color: var(--slate-500); margin: 0; }
 .detail:hover { background: var(--navy-800); border-bottom-color: var(--navy-800); }
 .detail:hover .detail__icon,
 .detail:hover .detail__title { color: var(--off-white); }
 .detail:hover .detail__desc { color: var(--slate-300); }
-@media (prefers-reduced-motion: reduce) {
-  .detail, .detail__icon, .detail__title, .detail__desc { transition: none; }
-}
 
 /* Article index */
 .art-list { border-top: 1px solid var(--line); }
@@ -1271,22 +1273,10 @@ a:hover > .itile, .art-item:hover .itile { border-color: var(--navy-600); color:
 /* Once arrived, an element answers hover immediately (see settle() in main.js). */
 [data-reveal].is-settled { transition-delay: 0s !important; }
 
-/* Large editorial images reveal through a mask that opens upward, while the
-   photograph settles from a slight enlargement. Used only on the big split-
-   layout images - never on cards, which would make a grid restless.
-
-   The mask is applied to the image, never to the observed container: Chrome's
-   IntersectionObserver measures a target after its own clip-path, so a fully
-   closed mask on the container has zero visible area and never reports
-   entering the viewport - the image would stay hidden for good. */
-.has-js [data-reveal="mask"] { opacity: 1; transform: none; background: transparent; }
-.has-js [data-reveal="mask"] img {
-  clip-path: inset(0 0 100% 0);
-  transform: scale(1.06);
-  transition: clip-path var(--dur-reveal) var(--ease-editorial),
-              transform calc(var(--dur-reveal) * 1.6) var(--ease-editorial);
-}
-.has-js [data-reveal="mask"].is-in img { clip-path: inset(0); transform: none; }
+/* Large split-layout images use the same reveal as everything else - a fade
+   and a short rise, matching the homepage. An upward mask wipe was tried and
+   dropped: on scroll it read as a curtain coming down rather than as content
+   arriving. */
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1294,7 +1284,6 @@ a:hover > .itile, .art-item:hover .itile { border-color: var(--navy-600); color:
     transition-duration: 0.001ms !important;
   }
   [data-reveal] { opacity: 1; transform: none; }
-  .has-js [data-reveal="mask"] img { clip-path: none; transform: none; }
 }
 
 /* ---------- RESPONSIVE ---------- */
@@ -1574,6 +1563,74 @@ a:hover > .itile, .art-item:hover .itile { border-color: var(--navy-600); color:
 .detail:hover .detail__applied span { color: var(--slate-300); }
 .detail:hover .detail__applied a { color: var(--off-white); }
 @media (max-width: 860px) { .detail__applied { grid-column: 1 / -1; } }
+
+/* ===========================================================================
+   17. SURFACE HOVER
+   Capability rows and case-study cards turn navy under the pointer, as a
+   reading aid for the item in focus. One block owns their timing, so both
+   behave identically:
+     - leaving: a slow --hover-out fade, so the fill lingers rather than snaps
+     - arriving: --hover-in after a short --hover-delay, so a row merely passed
+       over on the way elsewhere does not flash
+   Both elements also carry a scroll reveal. That reveal's transition list is
+   repeated here on purpose: a separate, more specific reveal rule would
+   otherwise replace these transitions outright and the fill would switch
+   instantly - which is exactly what made the capability rows feel clicky.
+   =========================================================================== */
+.detail, .cs,
+.has-js .detail[data-reveal], .has-js .cs[data-reveal] {
+  transition:
+    opacity var(--dur-reveal) var(--ease-editorial),
+    transform var(--dur-reveal) var(--ease-editorial),
+    background-color var(--hover-out) var(--ease-surface),
+    border-color var(--hover-out) var(--ease-surface);
+}
+.detail:hover, .cs:hover,
+.has-js .detail[data-reveal]:hover, .has-js .cs[data-reveal]:hover,
+.detail.is-settled:hover, .cs.is-settled:hover {
+  transition:
+    opacity var(--dur-reveal) var(--ease-editorial),
+    transform var(--dur-reveal) var(--ease-editorial),
+    background-color var(--hover-in) var(--ease-surface) var(--hover-delay),
+    border-color var(--hover-in) var(--ease-surface) var(--hover-delay) !important;
+}
+
+/* Everything inside follows the same clock. */
+.detail .detail__icon, .detail .detail__title, .detail .detail__desc,
+.detail .detail__applied span, .detail .detail__applied a,
+.cs .cs__sector, .cs .cs__title, .cs .cs__body, .cs .cs__metric,
+.cs .cs__metric .v, .cs .cs__metric .k, .cs::after {
+  transition: color var(--hover-out) var(--ease-surface),
+              background-color var(--hover-out) var(--ease-surface),
+              border-color var(--hover-out) var(--ease-surface),
+              opacity var(--hover-out) var(--ease-surface);
+}
+.detail:hover .detail__icon, .detail:hover .detail__title, .detail:hover .detail__desc,
+.detail:hover .detail__applied span, .detail:hover .detail__applied a,
+.cs:hover .cs__sector, .cs:hover .cs__title, .cs:hover .cs__body, .cs:hover .cs__metric,
+.cs:hover .cs__metric .v, .cs:hover .cs__metric .k, .cs:hover::after {
+  transition: color var(--hover-in) var(--ease-surface) var(--hover-delay),
+              background-color var(--hover-in) var(--ease-surface) var(--hover-delay),
+              border-color var(--hover-in) var(--ease-surface) var(--hover-delay),
+              opacity var(--hover-in) var(--ease-surface) var(--hover-delay);
+}
+
+/* Case-study card on hover: navy ground, light type, the accent edge lifted
+   to the brand blue so it still reads as an edge. Body copy in slate-300 on
+   navy-800 measures about 9:1. */
+.cs:hover { background: var(--navy-800); border-color: var(--navy-800); border-left-color: var(--blue); }
+.cs:hover .cs__sector { color: var(--slate-300); }
+.cs:hover .cs__title { color: var(--off-white); }
+.cs:hover .cs__body { color: var(--slate-300); }
+.cs:hover .cs__metric { background: rgba(247, 247, 244, 0.06); border-color: var(--line-dark); }
+.cs:hover .cs__metric .v { color: var(--off-white); }
+.cs:hover .cs__metric .k { color: var(--slate-300); }
+.cs:hover::after { color: var(--off-white); opacity: 0.07; }
+
+@media (prefers-reduced-motion: reduce) {
+  .detail, .cs, .detail:hover, .cs:hover,
+  .detail *, .cs *, .cs::after { transition: none !important; }
+}
 
 @media print {
   .nav, .hero__media, .contact__topo, .progress, .article__rail { display: none !important; }
