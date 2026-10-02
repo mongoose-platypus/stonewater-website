@@ -1598,8 +1598,7 @@ a:hover > .itile, .art-item:hover .itile { border-color: var(--navy-600); color:
 /* Everything inside follows the same clock. */
 .detail .detail__icon, .detail .detail__title, .detail .detail__desc,
 .detail .detail__applied span, .detail .detail__applied a,
-.cs .cs__sector, .cs .cs__title, .cs .cs__body, .cs .cs__metric,
-.cs .cs__metric .v, .cs .cs__metric .k, .cs::after {
+.cs .cs__sector, .cs .cs__title, .cs .cs__body, .cs::after {
   transition: color var(--hover-out) var(--ease-surface),
               background-color var(--hover-out) var(--ease-surface),
               border-color var(--hover-out) var(--ease-surface),
@@ -1607,8 +1606,7 @@ a:hover > .itile, .art-item:hover .itile { border-color: var(--navy-600); color:
 }
 .detail:hover .detail__icon, .detail:hover .detail__title, .detail:hover .detail__desc,
 .detail:hover .detail__applied span, .detail:hover .detail__applied a,
-.cs:hover .cs__sector, .cs:hover .cs__title, .cs:hover .cs__body, .cs:hover .cs__metric,
-.cs:hover .cs__metric .v, .cs:hover .cs__metric .k, .cs:hover::after {
+.cs:hover .cs__sector, .cs:hover .cs__title, .cs:hover .cs__body, .cs:hover::after {
   transition: color var(--hover-in) var(--ease-surface) var(--hover-delay),
               background-color var(--hover-in) var(--ease-surface) var(--hover-delay),
               border-color var(--hover-in) var(--ease-surface) var(--hover-delay),
@@ -1622,9 +1620,8 @@ a:hover > .itile, .art-item:hover .itile { border-color: var(--navy-600); color:
 .cs:hover .cs__sector { color: var(--slate-300); }
 .cs:hover .cs__title { color: var(--off-white); }
 .cs:hover .cs__body { color: var(--slate-300); }
-.cs:hover .cs__metric { background: rgba(247, 247, 244, 0.06); border-color: var(--line-dark); }
-.cs:hover .cs__metric .v { color: var(--off-white); }
-.cs:hover .cs__metric .k { color: var(--slate-300); }
+/* The result chip keeps its light ground on hover, so the figure stands out
+   against the navy card rather than sinking into it. */
 .cs:hover::after { color: var(--off-white); opacity: 0.07; }
 
 @media (prefers-reduced-motion: reduce) {
